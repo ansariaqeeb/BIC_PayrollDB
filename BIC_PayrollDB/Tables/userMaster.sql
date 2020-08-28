@@ -1,4 +1,4 @@
 ﻿CREATE TABLE [dbo].[userMaster]
 (
-	[Id] INT NOT NULL PRIMARY KEY
+	[USERID] [int] NOT NULL IDENTITY(1, 1)
 )
