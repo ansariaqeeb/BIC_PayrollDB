@@ -60,4 +60,7 @@
     <Folder Include="Tables" />
     <Folder Include="StoredProcedure" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\userMaster.sql" />
+  </ItemGroup>
 </Project>
