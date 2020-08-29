@@ -59,8 +59,20 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="StoredProcedure" />
+    <Folder Include="Function" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\userMaster.sql" />
+    <Build Include="StoredProcedure\LogGen_i.sql" />
+    <Build Include="StoredProcedure\UPDATEEXTRA.sql" />
+    <Build Include="StoredProcedure\LogError_i.sql" />
+    <Build Include="StoredProcedure\USERMAST_c.sql" />
+    <Build Include="Tables\LogTable.sql" />
+    <Build Include="Tables\ErrorLog.sql" />
+    <Build Include="Tables\ProfileImg.sql" />
+    <Build Include="Function\F_GetPortalProfileImg.sql" />
+    <Build Include="StoredProcedure\USERMAST_g.sql" />
+    <Build Include="StoredProcedure\USERAUTHENTICATION_g.sql" />
+    <Build Include="Tables\LOGINLOG.sql" />
   </ItemGroup>
 </Project>
