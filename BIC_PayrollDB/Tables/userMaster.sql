@@ -12,11 +12,9 @@ CREATE TABLE [dbo].[USERMAST]
 [MNAME] [varchar] (50) NULL,
 [LNAME] [varchar] (50) NULL,
 [DOB] [date] NULL,
-[ADDRESS] [varchar] (100) NULL,
-[PROFILEIMG] [varchar] (100) NULL,
-[PASSWORD] [varbinary] (max) NULL, 
-[SecondaryEmailID] [nvarchar] (200) NULL,  
-[EXTRA] [varchar] (10) NULL, 
+[ADDRESS] [varchar] (1000) NULL,
+[PASSWORD] [nvarchar] (max) NULL, 
+[SecondaryEmailID] [nvarchar] (300) NULL,   
 [ISACTIVE] [bit] NULL DEFAULT ((1)), 
 [ISADMIN] [bit] NULL DEFAULT ((0))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]

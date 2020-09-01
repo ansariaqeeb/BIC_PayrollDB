@@ -3,10 +3,10 @@ BEGIN
 DROP PROCEDURE LogError_i
 END
 GO
-CREATE PROCEDURE [dbo].[LogError_i]
-       @InputParam VARCHAR(2000) , -- by uspLogError in the ErrorLog table.
+CREATE PROCEDURE dbo.LogError_i
+       @InputParam XML , -- by uspLogError in the ErrorLog table.
        @ErrorLogID INT = 0 OUTPUT  -- Contains the ErrorLogID of the row inserted    
-       --WITH ENCRYPTION
+ 
 AS 
        BEGIN
              SET NOCOUNT ON;
@@ -23,21 +23,19 @@ AS
         -- Return if inside an uncommittable transaction.
         -- Data insertion/modification is not allowed when 
         -- a transaction is in an uncommittable state.
-                   IF XACT_STATE() = -1 
-                      BEGIN
-                            PRINT 'Cannot log error since the current transaction is in an uncommittable state. '
-                                  + 'Rollback the transaction before executing uspLogError in order to successfully log error information.';
-                            RETURN;
-                      END;
+					IF XACT_STATE() = -1 
+					BEGIN
+						PRINT 'Cannot log error since the current transaction is in an uncommittable state. '
+								+ 'Rollback the transaction before executing uspLogError in order to successfully log error information.';
+						RETURN;
+					END;
         --if(@InputParam IS NUll)
        -- BEgin
        
-
-                   INSERT   INTO ErrorLog ( UserName, ErrorNumber, ErrorSeverity, ErrorState, ErrorProcedure, ErrorLine,
+                   INSERT INTO ErrorLog ( UserName, ErrorNumber, ErrorSeverity, ErrorState, ErrorProcedure, ErrorLine,
                                             ErrorMessage, ErrorDate, InputParameter )
                    VALUES   ( CONVERT(SYSNAME, CURRENT_USER), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(),
-                              ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE(), GETUTCDATE(), @InputParam );
-
+                              ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE(), GETDATE(), @InputParam );
         -- Pass back the ErrorLogID of the row inserted
                    SELECT   @ErrorLogID = @@IDENTITY;
        
@@ -48,5 +46,4 @@ AS
                    RETURN -1;
              END CATCH
        END;
-
 GO

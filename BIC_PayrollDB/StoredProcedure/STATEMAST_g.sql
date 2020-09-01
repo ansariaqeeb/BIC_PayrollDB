@@ -1,0 +1,63 @@
+﻿IF (OBJECT_ID('STATEMAST_g') IS NOT NULL) 
+BEGIN 
+DROP PROCEDURE STATEMAST_g
+END
+GO
+CREATE PROCEDURE [dbo].[STATEMAST_g]
+(
+ @pXMLFILE XML 
+)
+AS
+    BEGIN 
+	  DECLARE @pSTATEID INT,
+	  @pCOUNTRYID INT  , 
+	  @pDESC NVARCHAR(120)
+     ------------------------------------------------------------------------------------------
+	 DECLARE @verrorId INT 
+     DECLARE @vspName VARCHAR(100) 
+     SET @vspName = 'STATEMAST_g'
+     
+     SELECT @pSTATEID = N.C.value('@STATEID[1]', 'INT'),
+			@pCOUNTRYID = N.C.value('@COUNTRYID[1]', 'INT'),
+			@pDESC = N.C.value('@DESC[1]', 'NVARCHAR(120)') 
+     FROM   @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
+    
+     EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vSPNAME
+     ------------------------------------------------------------------------------------------
+        
+		BEGIN TRY 
+			
+			SELECT  
+			SM.STATEID,
+			SM.STATECODE,
+			SM.SHORTNAME,
+			SM.STATENAME,
+			SM.COUNTRYID,
+			SM.ISACTIVE,
+			SM.CREATEDON,
+			SM.CREATEDBY,
+			SM.UPDATEDON,
+			SM.UPDATEDBY,
+			CM.COUNTRYNAME,
+			CM.COUNTRYCODE,
+			CM.SHORTNAME
+			FROM  dbo.STATEMAST SM 
+			LEFT JOIN COUNTRYMAST CM ON CM.COUNTRYID=SM.COUNTRYID
+			WHERE
+			1 = CASE WHEN  @pCOUNTRYID>0 AND SM.COUNTRYID= @pCOUNTRYID THEN 1 ELSE 0 END 
+			AND 1 = CASE WHEN  @pSTATEID>0 AND SM.STATEID= @pSTATEID THEN 1 ELSE 0 END
+			AND 1 = CASE WHEN LEN(@pDESC)= 0 THEN 1 WHEN  LEN(@pDESC)>0 AND (SM.STATECODE LIKE '%'+@pDESC+'%' OR SM.SHORTNAME LIKE '%'+@pDESC+'%' OR SM.STATENAME LIKE '%'+@pDESC+'%' ) THEN 1 ELSE 0 END  
+
+		END TRY 
+   
+		BEGIN CATCH
+
+		SET @vERRORID = 0 - ERROR_NUMBER() 
+		
+		SELECT  0 - ERROR_NUMBER() AS 'ID' 
+
+		EXECUTE LogError_i @pXMLFILE, @vERRORID OUTPUT; 
+
+		END CATCH; 
+    END 
+GO
