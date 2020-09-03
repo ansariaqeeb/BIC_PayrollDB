@@ -91,5 +91,11 @@
     <Build Include="Tables\COMPANY.sql" />
     <Build Include="StoredProcedure\COMPANY_c.sql" />
     <Build Include="StoredProcedure\COMPANY_g.sql" />
+    <Build Include="Tables\StatusTypeMaster.sql" />
+    <Build Include="StoredProcedure\StatusTypeMaster_c.sql" />
+    <Build Include="StoredProcedure\StatusTypeMaster_g.sql" />
+    <Build Include="Tables\StatusMaster.sql" />
+    <Build Include="StoredProcedure\StatusMaster_c.sql" />
+    <Build Include="StoredProcedure\StatusMaster_g.sql" />
   </ItemGroup>
 </Project>
