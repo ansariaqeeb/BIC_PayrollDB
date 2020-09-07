@@ -24,10 +24,12 @@ AS
 			@pDOB DATE,
 			@pADDRESS VARCHAR(1000),  
 			@pPASSWORD NVARCHAR(MAX),
+			@pSVRKEY NVARCHAR(MAX),
 			@pSecondaryEmailID NVARCHAR(300),
 			@pISACTIVE BIT,
 			@pISADMIN BIT,
 			@vlocal INT,
+			@pSVRDATE DATE,
 			@vspName VARCHAR(20),
 			@videntity INT,
 			@vERRORID INT 
@@ -51,7 +53,9 @@ AS
 					@pLNAME = N.C.value('@LNAME[1]','VARCHAR(50)'),
 					@pDOB = N.C.value('@DOB[1]','DATE'),
 					@pADDRESS = N.C.value('@ADDRESS[1]','VARCHAR(1000)'),
-					@pSecondaryEmailID = N.C.value('@SecondaryEmailID[1]','NVARCHAR(300)')
+					@pSecondaryEmailID = N.C.value('@SecondaryEmailID[1]','NVARCHAR(300)'),
+					@pSVRKEY = N.C.value('@SVRKEY[1]','NVARCHAR(MAX)'),
+					@pSVRDATE = N.C.value('@SVRDATE[1]','DATE')
 		 FROM @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
 
 		  EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vspName
@@ -84,7 +88,9 @@ AS
 						ISACTIVE, 
 						ISADMIN ,
 						CREATEDBY,
-						CREATEDON
+						CREATEDON,
+						SVRKEY,
+						SVRDATE
 					) 
 				  VALUES  
 					(   @pLOGINID , 
@@ -102,6 +108,8 @@ AS
 						1,
 						0,
 						0,
+						GETDATE(),
+						@pSVRKEY,
 						GETDATE()
 					)
 
@@ -125,7 +133,7 @@ AS
 					DOB=@pDOB,
 					ADDRESS=@pADDRESS,
 					SecondaryEmailID=@pSecondaryEmailID,
-					UPDATEBY=@pUSERID,
+					UPDATEDBY=@pUSERID,
 					UPDATEDON=GETDATE()
 					WHERE USERID=@pUSERID
 

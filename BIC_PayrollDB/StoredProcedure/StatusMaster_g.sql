@@ -1,25 +1,23 @@
-﻿IF (OBJECT_ID('StatusMaster_g') IS NOT NULL) 
-BEGIN 
-DROP PROCEDURE StatusMaster_g
-END
+﻿DROP PROCEDURE [dbo].USERMAST_g
 GO
-CREATE PROCEDURE [dbo].[StatusMaster_g]
+CREATE PROCEDURE [dbo].USERMAST_g
 (
  @pXMLFILE XML 
 )
 AS
     BEGIN 
 	 
-      DECLARE @pSTATUSID INT , @pTYPEID INT ,  
-	  @pDESC NVARCHAR(120)    
+      DECLARE @pUSERID INT   
+	  DECLARE @pLOGINID VARCHAR(50)   
+	  DECLARE @pPASSWORD NVARCHAR(MAX)
      ------------------------------------------------------------------------------------------
 	 DECLARE @verrorId INT 
      DECLARE @vspName VARCHAR(100) 
-     SET @vspName = 'StatusMaster_g'
+     SET @vspName = 'USERMAST_g'
      
-     SELECT @pSTATUSID = N.C.value('@STATUSID[1]', 'INT'),
-			@pTYPEID = N.C.value('@TYPEID[1]', 'INT'),
-			@pDESC = N.C.value('@DESC[1]', 'NVARCHAR(120)') 
+     SELECT @pUSERID = N.C.value('@USERID[1]', 'INT'),
+			@pLOGINID = N.C.value('@LOGINID[1]', 'VARCHAR(50)'),
+			@pPASSWORD = N.C.value('@PASSWORD[1]', 'NVARCHAR(MAX)') 
      FROM   @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
     
      EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vSPNAME
@@ -27,21 +25,33 @@ AS
         
 		BEGIN TRY 
 			
-			SELECT 
-						STATUSID,
-						STATUSCODE,
-						TYPEID,
-						DISCRIPTION,
-						UPDATEDBY, 
-						UPDATEDON,
-						CREATEDBY,
-						CREATEDON,
-						ISACTIVE
-
-			FROM  dbo.StatusMaster
+			SELECT  
+			USERID,
+			LOGINID ,  
+			Email ,
+			MobileNo ,
+			MobileVerify ,
+			EmailVerify , 
+			FNAME ,
+			MNAME ,
+			LNAME ,
+			DOB ,
+			ADDRESS ,
+			PASSWORD, 
+			SecondaryEmailID ,   
+			ISACTIVE, 
+			ISADMIN ,
+			CREATEDBY,
+			CREATEDON,
+			UPDATEDBY,
+			UPDATEDON,
+			SVRKEY,
+			SVRDATE
+			FROM  dbo.USERMAST
 			WHERE
-			1 = CASE WHEN  @pSTATUSID>0 AND STATUSID= @pSTATUSID THEN 1 ELSE 0 END
-		AND	1 = CASE WHEN  @pTYPEID>0 AND TYPEID= @pTYPEID THEN 1 ELSE 0 END  
+			1 = CASE WHEN  LEN(@pLOGINID)>0 AND LOGINID=@pLOGINID THEN 1 ELSE 0 END 
+			AND 1 = CASE WHEN  LEN(@pPASSWORD)>0 AND PASSWORD=@pPASSWORD THEN 1 ELSE 0 END 
+			AND ISACTIVE=1
 
 		END TRY 
    
