@@ -59,8 +59,43 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="StoredProcedure" />
+    <Folder Include="Function" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\userMaster.sql" />
+    <Build Include="StoredProcedure\LogGen_i.sql" />
+    <Build Include="StoredProcedure\UPDATEEXTRA.sql" />
+    <Build Include="StoredProcedure\LogError_i.sql" />
+    <Build Include="StoredProcedure\USERMAST_c.sql" />
+    <Build Include="Tables\LogTable.sql" />
+    <Build Include="Tables\ErrorLog.sql" />
+    <Build Include="Tables\ProfileImg.sql" />
+    <Build Include="Function\F_GetPortalProfileImg.sql" />
+    <Build Include="StoredProcedure\USERAUTHENTICATION_g.sql" />
+    <Build Include="Tables\LOGINLOG.sql" />
+    <Build Include="Tables\DbLog.sql" />
+    <Build Include="StoredProcedure\DbLog_c.sql" />
+    <Build Include="Tables\ErrorLog_1.sql" />
+    <Build Include="Tables\ERRORMESS.sql" />
+    <Build Include="Function\F_ERRORXML.sql" />
+    <Build Include="Tables\COUNTRYMAST.sql" />
+    <Build Include="StoredProcedure\COUNTRYMAST_g.sql" />
+    <Build Include="StoredProcedure\USERMAST_g.sql" />
+    <Build Include="StoredProcedure\COUNTRYMAST_c.sql" />
+    <Build Include="Tables\STATEMAST.sql" />
+    <Build Include="StoredProcedure\STATEMAST_g.sql" />
+    <Build Include="StoredProcedure\STATEMAST_c.sql" />
+    <Build Include="Tables\CITYMAST.sql" />
+    <Build Include="StoredProcedure\CITYMAST_g.sql" />
+    <Build Include="StoredProcedure\CITYMAST_c.sql" />
+    <Build Include="Tables\COMPANY.sql" />
+    <Build Include="StoredProcedure\COMPANY_c.sql" />
+    <Build Include="StoredProcedure\COMPANY_g.sql" />
+    <Build Include="Tables\StatusTypeMaster.sql" />
+    <Build Include="StoredProcedure\StatusTypeMaster_c.sql" />
+    <Build Include="StoredProcedure\StatusTypeMaster_g.sql" />
+    <Build Include="Tables\StatusMaster.sql" />
+    <Build Include="StoredProcedure\StatusMaster_c.sql" />
+    <Build Include="StoredProcedure\StatusMaster_g.sql" />
   </ItemGroup>
 </Project>

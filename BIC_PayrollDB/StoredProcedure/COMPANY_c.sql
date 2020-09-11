@@ -1,0 +1,252 @@
+﻿IF (OBJECT_ID('COMPANY_c') IS NOT NULL) 
+BEGIN 
+DROP PROCEDURE COMPANY_c
+END
+GO
+CREATE PROCEDURE dbo.COMPANY_c
+(
+	 @pXMLFILE XML ,
+	 @pERRORXML XML OUT 
+)
+     
+AS 
+    BEGIN
+			DECLARE 
+			@pFLAG CHAR(1),
+			@pCOMPID INT, 
+			@pCOMPCODE VARCHAR(20), 
+			@pCOMPNAME nvarchar(120),
+			@pADDR1COMPLEXNAME NVARCHAR(500), 
+			@pADDR1STREETNO NVARCHAR(500),
+			@pADDR1STREETNAME NVARCHAR(500),
+			@pADDR1POSTALCODE NVARCHAR(255),
+			@pADDR1COUNTRYID INT,
+			@pADDR1STATEID INT,
+			@pADDR1CITYID INT,
+			@pADDR2SAMEASADDR1 BIT,
+			@pADDR2COMPLEXNAME NVARCHAR(500), 
+			@pADDR2STREETNO NVARCHAR(500),
+			@pADDR2STREETNAME NVARCHAR(500),
+			@pADDR2POSTALCODE NVARCHAR(255),
+			@pADDR2COUNTRYID INT,
+			@pADDR2STATEID INT,
+			@pADDR2CITYID INT,
+			@pPRIMARYPHONE NVARCHAR(20),
+			@pSECONDARYPHONE NVARCHAR(20),
+			@pFAX NVARCHAR(20),
+			@pEMAILID NVARCHAR(120),
+			@pWEBSITE NVARCHAR(500),
+			@pESTABLISHEDIN DATE,
+			@pMANPOWERWORKING INT,
+			@pREGNO NVARCHAR(30), 
+			@pISACTIVE BIT,
+			@pUSERID INT, 
+			@vlocal INT,
+			@vspName VARCHAR(20),
+			@videntity INT,
+			@vERRORID INT 
+			 
+
+			SET @vlocal = 0 
+			SET @vspName = 'COMPANY_c'
+
+		  SELECT	@pFLAG = N.C.value('@FLAG[1]', 'CHAR(1)'),
+					@pCOMPID  =  N.C.value('@COMPID[1]','INT'), 
+					@pCOMPCODE  =  N.C.value('@COMPCODE[1]','VARCHAR(20)'), 
+					@pCOMPNAME  =  N.C.value('@COMPNAME[1]','NVARCHAR(120)'), 
+					@pADDR1COMPLEXNAME  =  N.C.value('@ADDR1COMPLEXNAME[1]','NVARCHAR(500)'), 
+					@pADDR1STREETNO  =  N.C.value('@ADDR1STREETNO[1]','NVARCHAR(500)'),
+					@pADDR1STREETNAME =  N.C.value('@ADDR1STREETNAME[1]','NVARCHAR(500)'),
+					@pADDR1POSTALCODE =  N.C.value('@ADDR1POSTALCODE[1]','NVARCHAR(20)'),
+					@pADDR1COUNTRYID =  N.C.value('@ADDR1COUNTRYID[1]','INT'),
+					@pADDR1STATEID =  N.C.value('@ADDR1STATEID[1]','INT'),
+					@pADDR1CITYID =  N.C.value('@ADDR1CITYID[1]','INT'),
+					@pADDR2SAMEASADDR1=  N.C.value('@ADDR2SAMEASADDR1[1]','BIT'),
+					@pADDR2COMPLEXNAME =  N.C.value('@ADDR2COMPLEXNAME[1]','NVARCHAR(120)'),
+					@pADDR2STREETNO =  N.C.value('@ADDR2STREETNO[1]','NVARCHAR(120)'),
+					@pADDR2STREETNAME  =  N.C.value('@ADDR2STREETNAME[1]','NVARCHAR(120)'),
+					@pADDR2POSTALCODE =  N.C.value('@ADDR2POSTALCODE[1]','NVARCHAR(20)'),
+					@pADDR2COUNTRYID =  N.C.value('@ADDR2COUNTRYID[1]','INT'),
+					@pADDR2STATEID =  N.C.value('@ADDR2STATEID[1]','INT'),
+					@pADDR2CITYID =  N.C.value('@ADDR2CITYID[1]','INT'),
+					@pPRIMARYPHONE =  N.C.value('@PRIMARYPHONE[1]','NVARCHAR(20)'),
+					@pSECONDARYPHONE =  N.C.value('@SECONDARYPHONE[1]','NVARCHAR(20)'),
+					@pFAX=  N.C.value('@FAX[1]','NVARCHAR(20)'),
+					@pEMAILID =  N.C.value('@EMAILID[1]','NVARCHAR(120)'),
+					@pWEBSITE =  N.C.value('@WEBSITE[1]','NVARCHAR(500)'),
+					@pESTABLISHEDIN=  N.C.value('@ESTABLISHEDIN[1]','DATE'),
+					@pMANPOWERWORKING =  N.C.value('@MANPOWERWORKING[1]','INT'),
+					@pREGNO =  N.C.value('@REGNO[1]','NVARCHAR(30)'), 
+					@pISACTIVE  =  N.C.value('@ISACTIVE[1]','BIT'),
+					@pUSERID  =  N.C.value('@USERID[1]','INT')  
+		 FROM @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
+
+		  EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vspName
+
+         ---------------------------------------------------------------------------------------
+           BEGIN TRY
+			IF @@TRANCOUNT = 0  
+			  BEGIN  
+				  BEGIN TRANSACTION  
+				  SET @vLOCAL = 1 
+			   END 
+
+            IF @pFLAG = 'I' 
+                BEGIN
+
+					INSERT INTO dbo.COMPANY 
+					(   
+						COMPCODE,
+						COMPNAME,
+						ADDR1COMPLEXNAME,
+						ADDR1STREETNO,
+						ADDR1STREETNAME,
+						ADDR1POSTALCODE,
+						ADDR1COUNTRYID,
+						ADDR1STATEID,
+						ADDR1CITYID, 
+						ADDR2SAMEASADDR1,
+						ADDR2COMPLEXNAME,
+						ADDR2STREETNO,
+						ADDR2STREETNAME,
+						ADDR2POSTALCODE,
+						ADDR2COUNTRYID,
+						ADDR2STATEID,
+						ADDR2CITYID,
+						PRIMARYPHONE,
+						SECONDARYPHONE,
+						FAX,
+						EMAILID,
+						WEBSITE,
+						ESTABLISHEDIN,
+						MANPOWERWORKING, 
+						REGNO,
+						CREATEDON,
+						CREATEDBY
+					) 
+				  VALUES  
+					(   
+						@pCOMPCODE,
+						@pCOMPNAME,
+						@pADDR1COMPLEXNAME,
+						@pADDR1STREETNO,
+						@pADDR1STREETNAME,
+						@pADDR1POSTALCODE,
+						@pADDR1COUNTRYID,
+						@pADDR1STATEID,
+						@pADDR1CITYID, 
+						@pADDR2SAMEASADDR1,
+						@pADDR2COMPLEXNAME,
+						@pADDR2STREETNO,
+						@pADDR2STREETNAME,
+						@pADDR2POSTALCODE,
+						@pADDR2COUNTRYID,
+						@pADDR2STATEID,
+						@pADDR2CITYID,
+						@pPRIMARYPHONE,
+						@pSECONDARYPHONE,
+						@pFAX,
+						@pEMAILID,
+						@pWEBSITE,
+						@pESTABLISHEDIN,
+						@pMANPOWERWORKING, 
+						@pREGNO,  
+						GETDATE(),
+						@pUSERID
+					)
+
+					SET @videntity = @@IDENTITY
+                  
+                END 
+            ELSE 
+                IF @pFLAG = 'E' 
+                    BEGIN
+
+					UPDATE dbo.COMPANY SET 
+					COMPCODE =@pCOMPCODE,
+					COMPNAME =@pCOMPNAME,
+					ADDR1COMPLEXNAME =@pADDR1COMPLEXNAME,
+					ADDR1STREETNO =@pADDR1STREETNO,
+					ADDR1STREETNAME =@pADDR1STREETNAME,
+					ADDR1POSTALCODE =@pADDR1POSTALCODE,
+					ADDR1COUNTRYID =@pADDR1COUNTRYID,
+					ADDR1STATEID =@pADDR1STATEID,
+					ADDR1CITYID =@pADDR1CITYID, 
+					ADDR2SAMEASADDR1 =@pADDR2SAMEASADDR1,
+					ADDR2COMPLEXNAME =@pADDR2COMPLEXNAME,
+					ADDR2STREETNO =@pADDR2STREETNO,
+					ADDR2STREETNAME =@pADDR2STREETNAME,
+					ADDR2POSTALCODE =@pADDR2POSTALCODE,
+					ADDR2COUNTRYID =@pADDR2COUNTRYID,
+					ADDR2STATEID =@pADDR2STATEID,
+					ADDR2CITYID =@pADDR2CITYID,
+					PRIMARYPHONE =@pPRIMARYPHONE,
+					SECONDARYPHONE=@pSECONDARYPHONE,
+					FAX =@pFAX,
+					EMAILID =@pEMAILID,
+					WEBSITE =@pWEBSITE,
+					ESTABLISHEDIN =@pESTABLISHEDIN,
+					MANPOWERWORKING =@pMANPOWERWORKING, 
+					REGNO=@pREGNO, 
+					ISACTIVE=@pISACTIVE, 
+					UPDATEDBY=@pUSERID,
+					UPDATEDON=GETDATE()
+					WHERE COMPID=@pCOMPID
+
+					SET @videntity = @pCOMPID 
+
+                    END 
+                ELSE 
+                    IF @pFLAG = 'D' 
+                     BEGIN  
+                          DELETE  FROM dbo.COMPANY
+                          WHERE COMPID=@pCOMPID
+
+                          SET @videntity = @pCOMPID
+                     END  
+                        
+
+            IF @pFlag IN ( 'I', 'E', 'D')
+				BEGIN 
+					IF @pFlag = 'I' SET @pERRORXML = dbo.F_ERRORXML(@vIDENTITY, 'Successfully Added', 'S', 'Company', 0)
+					IF @pFlag = 'E' SET @pERRORXML = dbo.F_ERRORXML(@vIDENTITY, 'Successfully Edited', 'S', 'Company', 0)
+					IF @pFlag = 'D' SET @pERRORXML = dbo.F_ERRORXML(@vIDENTITY, 'Successfully Deleted', 'S', 'Company', 0) 
+				END 
+
+         IF ( @@trancount > 0 AND @vLOCAL = 1 )
+		  BEGIN    
+			COMMIT TRANSACTION 
+		  END   
+        END TRY    
+        BEGIN CATCH
+          IF ( @@trancount > 0  AND @vLOCAL = 1 )
+            BEGIN 
+              ROLLBACK TRANSACTION 
+            END    
+
+         SET @vERRORID = 0 - ERROR_NUMBER() 
+
+         SET @pERRORXML = dbo.F_ERRORXML(@vERRORID, '', 'E', 'Company', 1)
+
+		EXECUTE LogError_i @pXMLFILE, @vERRORID OUTPUT;
+
+    END CATCH;
+  END
+
+/*
+  DECLARE @pERRORXML XML 
+  EXEC dbo.CITYMAST_c @pXMLFILE = '<XMLFILE> 
+  <SPXML> 
+  <SPDETAILS FLAG="I" CITYID="2" COUNTRYID="3" STATEID="3" CITYCODE="AUR" CITYNAME="Aurangabad"  ISACTIVE="1"  USERID="1" /> 
+  </SPXML> 
+  </XMLFILE>', -- xml
+      @pERRORXML = @pERRORXML OUT  -- xml
+  
+  SELECT @pERRORXML 
+  
+SELECT * FROM  CITYMAST
+*/
+-- Stored Procedure
+
+
+GO
