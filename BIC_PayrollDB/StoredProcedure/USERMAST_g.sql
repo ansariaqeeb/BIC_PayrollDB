@@ -28,7 +28,8 @@ AS
         
 		BEGIN TRY 
 			
-			SELECT  
+			SELECT 
+			USERID, 
 			LOGINID ,  
 			Email ,
 			MobileNo ,
@@ -40,13 +41,16 @@ AS
 			DOB ,
 			ADDRESS ,
 			PASSWORD, 
+			COUNTRYID,
 			SecondaryEmailID ,   
 			ISACTIVE, 
 			ISADMIN ,
 			CREATEDBY,
 			CREATEDON,
-			UPDATEBY,
-			UPDATEDON
+			UPDATEDBY,
+			UPDATEDON,
+			SVRKEY,
+			SVRDATE
 			FROM  dbo.USERMAST
 			WHERE
 			1 = CASE WHEN  LEN(@pLOGINID)>0 AND LOGINID=@pLOGINID THEN 1 ELSE 0 END 

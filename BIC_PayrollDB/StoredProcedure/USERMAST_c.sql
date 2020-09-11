@@ -32,7 +32,8 @@ AS
 			@pSVRDATE DATE,
 			@vspName VARCHAR(20),
 			@videntity INT,
-			@vERRORID INT 
+			@vERRORID INT ,
+			@pCOUNTRYID int
 			 
 
 			SET @vlocal = 0 
@@ -55,6 +56,7 @@ AS
 					@pADDRESS = N.C.value('@ADDRESS[1]','VARCHAR(1000)'),
 					@pSecondaryEmailID = N.C.value('@SecondaryEmailID[1]','NVARCHAR(300)'),
 					@pSVRKEY = N.C.value('@SVRKEY[1]','NVARCHAR(MAX)'),
+					@pCOUNTRYID =  N.C.value('@COUNTRYID[1]','INT'),
 					@pSVRDATE = N.C.value('@SVRDATE[1]','DATE')
 		 FROM @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
 
@@ -84,6 +86,7 @@ AS
 						DOB ,
 						ADDRESS ,
 						PASSWORD, 
+						COUNTRYID,
 						SecondaryEmailID ,   
 						ISACTIVE, 
 						ISADMIN ,
@@ -91,6 +94,7 @@ AS
 						CREATEDON,
 						SVRKEY,
 						SVRDATE
+						
 					) 
 				  VALUES  
 					(   @pLOGINID , 
@@ -104,6 +108,7 @@ AS
 						@pDOB,
 						@pADDRESS,
 						@pPASSWORD ,
+						@pCOUNTRYID,
 						@pSecondaryEmailID,
 						1,
 						0,
@@ -125,6 +130,7 @@ AS
 					Email=@pEmail,
 					MobileNo=@pMobileNo,
 					PASSWORD=@pPASSWORD,
+					COUNTRYID=@pCOUNTRYID,
 					MobileVerify=@pMobileVerify,
 					EmailVerify=@pEmailVerify,
 					FNAME=@pFNAME,
@@ -181,7 +187,7 @@ AS
   DECLARE @pERRORXML XML 
   EXEC dbo.USERMAST_c @pXMLFILE = '<XMLFILE> 
   <SPXML> 
-  <SPDETAILS FLAG="D" USERID="1" Email="aqeeb1.ansari@gmaill.com" LOGINID="admin1" PASSWORD="1234561" ISADMIN="0" ISACTIVE="0"  MobileNo="12345678901"  MobileVerify="1"  EmailVerify="1" FNAME="Aqeeb1" MNAME="K1" LNAME="Ansari1" DOB="2000-09-18" ADDRESS="qwertyuiop1" SecondaryEmailID="asd1@gmail.com"  /> 
+  <SPDETAILS FLAG="D" USERID="1" Email="aqeeb1.ansari@gmaill.com" LOGINID="admin1" PASSWORD="1234561" ISADMIN="0" ISACTIVE="0"  MobileNo="12345678901"  MobileVerify="1"  EmailVerify="1" FNAME="Aqeeb1" MNAME="K1" LNAME="Ansari1" DOB="2000-09-18" ADDRESS="qwertyuiop1" SecondaryEmailID="asd1@gmail.com" COUNTRYID"1" /> 
   </SPXML> 
   </XMLFILE>', -- xml
       @pERRORXML = @pERRORXML OUT  -- xml
