@@ -97,5 +97,11 @@
     <Build Include="Tables\StatusMaster.sql" />
     <Build Include="StoredProcedure\StatusMaster_c.sql" />
     <Build Include="StoredProcedure\StatusMaster_g.sql" />
+    <Build Include="Tables\EMPLOYEE.sql" />
+    <Build Include="StoredProcedure\EMPLOYEE_c.sql" />
+    <Build Include="StoredProcedure\EMPLOYEE_g.sql" />
+    <Build Include="StoredProcedure\LK_USERMAST_g.sql" />
+    <Build Include="Tables\FREQUENCYPERIOD.sql" />
+    <Build Include="Tables\FREQUENCYPERIODTRANS.sql" />
   </ItemGroup>
 </Project>
