@@ -152,6 +152,10 @@ AS
             IF @pFLAG = 'I' 
                 BEGIN
 
+					DECLARE @pTempEMPCODE VARCHAR(20)
+
+					SET @pTempEMPCODE= (SELECT TOP 1 EMPID  FROM EMPLOYEE ORDER BY EMPID DESC)+1
+
 					INSERT INTO EMPLOYEE
 					( 
 						 EMPCODE,  
@@ -204,8 +208,7 @@ AS
 						 WEEKDAYS,   
 						 ANNUALSTANDARDLEAVE, 
 						 ANNUALSICKLEAVE, 
-						 ANNUALOPTIONALLEAVE, 
-						 ISACTIVE, 
+						 ANNUALOPTIONALLEAVE,  
 						 COMPID, 
 						 CREATEDON,  
 						 CREATEDBY  
@@ -263,13 +266,17 @@ AS
 						@pANNUALSTANDARDLEAVE,	
 						@pANNUALSICKLEAVE,		
 						@pANNUALOPTIONALLEAVE, 
-						@pISACTIVE,	 
 						@pCOMPID,
 						GETDATE(),
 						@pUSERID				
 					)
 
 					SET @videntity = @@IDENTITY
+
+					UPDATE EMPLOYEE SET 
+					EMPCODE='EMP'+CONVERT(VARCHAR(20),@videntity)
+					WHERE 
+					EMPID=@videntity
                   
                 END 
             ELSE 
@@ -277,7 +284,7 @@ AS
                     BEGIN
 
 						UPDATE dbo.EMPLOYEE SET 
-						EMPCODE			=@pEMPCODE,			
+						
 						TITLE				=@pTITLE,				
 						FIRSTNAME			=@pFIRSTNAME,			
 						MIDDLENAME			=@pMIDDLENAME,			

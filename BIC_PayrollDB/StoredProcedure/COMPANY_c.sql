@@ -210,18 +210,20 @@ AS
 								ISACTIVE,
 								ISCLOSED,
 								CREATEDON,
-								CREATEDBY
+								CREATEDBY,
+								ISCURRENT
 							)
 							VALUES
 							(
 								@pMID,
 								@count,
 								@pCurrentMonthEndDate,
-								CASE WHEN @count<@pSTARTINGMONTH THEN 'Closed' WHEN @count>=@pSTARTINGMONTH THEN 'Not run' ELSE '' END,
+								CASE WHEN @count<@pSTARTINGMONTH THEN 'Closed' WHEN @count=@pSTARTINGMONTH THEN 'Current'  WHEN @count>=@pSTARTINGMONTH THEN 'Not run' ELSE '' END,
 								1,
 								CASE WHEN @count<@pSTARTINGMONTH THEN 1 WHEN @count>=@pSTARTINGMONTH THEN 0 ELSE 0 END,
 								GETDATE(),
-								@pUSERID
+								@pUSERID,
+								CASE WHEN @count=@pSTARTINGMONTH THEN 1 ELSE 0 END
 							)
 						
 						SET @count = @count + 1;
