@@ -97,5 +97,18 @@
     <Build Include="Tables\StatusMaster.sql" />
     <Build Include="StoredProcedure\StatusMaster_c.sql" />
     <Build Include="StoredProcedure\StatusMaster_g.sql" />
+    <Build Include="Tables\EMPLOYEE.sql" />
+    <Build Include="StoredProcedure\EMPLOYEE_c.sql" />
+    <Build Include="StoredProcedure\EMPLOYEE_g.sql" />
+    <Build Include="StoredProcedure\LK_USERMAST_g.sql" />
+    <Build Include="Tables\FREQUENCYPERIOD.sql" />
+    <Build Include="Tables\FREQUENCYPERIODTRANS.sql" />
+    <Build Include="StoredProcedure\PAYFREQUENCY_g.sql" />
+    <Build Include="Tables\PAYSLIPHEADS.sql" />
+    <Build Include="StoredProcedure\PAYSLIPHEADS_c.sql" />
+    <Build Include="StoredProcedure\PAYSLIPHEADS_g.sql" />
+    <Build Include="Tables\EMPLOYEEPAYMAPPING.sql" />
+    <Build Include="StoredProcedure\EMPLOYEEPAYMAPPING_g.sql" />
+    <Build Include="StoredProcedure\EMPLOYEEPAYMAPPING_c.sql" />
   </ItemGroup>
 </Project>

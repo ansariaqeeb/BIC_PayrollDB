@@ -28,12 +28,13 @@ AS
 			@pSecondaryEmailID NVARCHAR(300),
 			@pISACTIVE BIT,
 			@pISADMIN BIT,
+			@pCREATEDBYID INT,
 			@vlocal INT,
 			@pSVRDATE DATE,
 			@vspName VARCHAR(20),
 			@videntity INT,
 			@vERRORID INT ,
-			@pCOUNTRYID int
+			@pCOUNTRYNAME NVARCHAR(300)
 			 
 
 			SET @vlocal = 0 
@@ -56,8 +57,9 @@ AS
 					@pADDRESS = N.C.value('@ADDRESS[1]','VARCHAR(1000)'),
 					@pSecondaryEmailID = N.C.value('@SecondaryEmailID[1]','NVARCHAR(300)'),
 					@pSVRKEY = N.C.value('@SVRKEY[1]','NVARCHAR(MAX)'),
-					@pCOUNTRYID =  N.C.value('@COUNTRYID[1]','INT'),
-					@pSVRDATE = N.C.value('@SVRDATE[1]','DATE')
+					@pCOUNTRYNAME =  N.C.value('@COUNTRYNAME[1]','NVARCHAR(300)'),
+					@pSVRDATE = N.C.value('@SVRDATE[1]','DATE'),
+					@pCREATEDBYID=  N.C.value('@CREATEDBYID[1]','INT')
 		 FROM @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
 
 		  EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vspName
@@ -86,7 +88,7 @@ AS
 						DOB ,
 						ADDRESS ,
 						PASSWORD, 
-						COUNTRYID,
+						COUNTRYNAME,
 						SecondaryEmailID ,   
 						ISACTIVE, 
 						ISADMIN ,
@@ -108,11 +110,11 @@ AS
 						@pDOB,
 						@pADDRESS,
 						@pPASSWORD ,
-						@pCOUNTRYID,
+						@pCOUNTRYNAME,
 						@pSecondaryEmailID,
 						1,
-						0,
-						0,
+						@pISADMIN,
+						@pCREATEDBYID,
 						GETDATE(),
 						@pSVRKEY,
 						GETDATE()
@@ -130,7 +132,7 @@ AS
 					Email=@pEmail,
 					MobileNo=@pMobileNo,
 					PASSWORD=@pPASSWORD,
-					COUNTRYID=@pCOUNTRYID,
+					COUNTRYNAME=@pCOUNTRYNAME,
 					MobileVerify=@pMobileVerify,
 					EmailVerify=@pEmailVerify,
 					FNAME=@pFNAME,
@@ -139,7 +141,8 @@ AS
 					DOB=@pDOB,
 					ADDRESS=@pADDRESS,
 					SecondaryEmailID=@pSecondaryEmailID,
-					UPDATEDBY=@pUSERID,
+					ISACTIVE=@pISACTIVE,
+					UPDATEDBY=@pCREATEDBYID,
 					UPDATEDON=GETDATE()
 					WHERE USERID=@pUSERID
 
