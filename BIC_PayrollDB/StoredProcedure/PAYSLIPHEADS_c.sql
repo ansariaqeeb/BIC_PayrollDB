@@ -25,7 +25,14 @@ AS
 			@vlocal INT,
 			@vspName VARCHAR(20),
 			@videntity INT,
-			@vERRORID INT  
+			@vERRORID INT,
+			@pFORMULA VARCHAR(5000),
+			@pIsCalculation BIT,
+			@pISAFFECTNATIONALPAY BIT,
+			@pISAFFECTPAYSLIP BIT,
+			@pPRINTONPS BIT,
+			@pTYPEOFINPUTID INT ,
+			@pRATEID INT 
 			 
 
 			SET @vlocal = 0 
@@ -36,7 +43,14 @@ AS
 					@pHEADCODE  =  N.C.value('@HEADCODE[1]','VARCHAR(20)'), 
 					@pTRANSACTIONTYPE  =  N.C.value('@TRANSACTIONTYPE[1]','INT'), 
 					@pDESC  =  N.C.value('@DESC[1]','NVARCHAR(200)'), 
-					@pISACTIVE  =  N.C.value('@ISACTIVE[1]','BIT'), 
+					@pISACTIVE  =  N.C.value('@ISACTIVE[1]','BIT'),
+					@pIsCalculation  =  N.C.value('@IsCalculation[1]','BIT'),
+					@pISAFFECTNATIONALPAY  =  N.C.value('@ISAFFECTNATIONALPAY[1]','BIT'),
+					@pISAFFECTPAYSLIP  =  N.C.value('@ISAFFECTPAYSLIP[1]','BIT'),
+					@pPRINTONPS  =  N.C.value('@PRINTONPS[1]','BIT'),
+					@pFORMULA  =  N.C.value('@FORMULA[1]','varchar(5000)'), 
+					@pTYPEOFINPUTID  =  N.C.value('@TYPEOFINPUTID[1]','INT'), 
+					@pRATEID  =  N.C.value('@RATEID[1]','INT'), 
 					@pCOMPID  =  N.C.value('@COMPID[1]','INT') ,
 					@pUSERID  =  N.C.value('@USERID[1]','INT')  
 		 FROM @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
@@ -59,6 +73,13 @@ AS
 						HEADCODE,
 						[DESC],
 						TRANSACTIONTYPE,
+						ISAFFECTNATIONALPAY,
+						ISAFFECTPAYSLIP,
+						PRINTONPS,
+						TYPEOFINPUTID,
+						RATEID,
+						IsCalculation,
+						FORMULA,
 						COMPID,
 						CREATEDON,
 						CREATEDBY
@@ -68,6 +89,13 @@ AS
 						@pHEADCODE,
 						@pDESC,
 						@pTRANSACTIONTYPE,
+						@pISAFFECTNATIONALPAY,
+						@pISAFFECTPAYSLIP,
+						@pPRINTONPS,
+						@pTYPEOFINPUTID,
+						@pRATEID,
+						@pIsCalculation,
+						@pFORMULA,
 						@pCOMPID,
 						GETDATE(),
 						@pUSERID
@@ -84,7 +112,14 @@ AS
 					UPDATE dbo.PAYSLIPHEADS SET 
 					HEADCODE =@pHEADCODE,
 					[DESC] =@pDESC,
-					TRANSACTIONTYPE =@pTRANSACTIONTYPE,  
+					TRANSACTIONTYPE =@pTRANSACTIONTYPE,
+					ISAFFECTNATIONALPAY=@pISAFFECTNATIONALPAY,
+					ISAFFECTPAYSLIP=@pISAFFECTPAYSLIP,
+					PRINTONPS=@pPRINTONPS,
+					TYPEOFINPUTID=@pTYPEOFINPUTID,
+					RATEID=@pRATEID,
+					IsCalculation=@pIsCalculation,
+					FORMULA=@pFORMULA,  
 					ISACTIVE=@pISACTIVE, 
 					UPDATEDBY=@pUSERID,
 					UPDATEDON=GETDATE()

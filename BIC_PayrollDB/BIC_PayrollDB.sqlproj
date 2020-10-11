@@ -110,5 +110,10 @@
     <Build Include="Tables\EMPLOYEEPAYMAPPING.sql" />
     <Build Include="StoredProcedure\EMPLOYEEPAYMAPPING_g.sql" />
     <Build Include="StoredProcedure\EMPLOYEEPAYMAPPING_c.sql" />
+    <Build Include="Tables\RATEMASTER.sql" />
+    <Build Include="StoredProcedure\RATEMASTER_c.sql" />
+    <Build Include="StoredProcedure\RATEMASTER_g.sql" />
+    <Build Include="Tables\PROCESSPAYSLIP.sql" />
+    <Build Include="StoredProcedure\PROCESSPAYSLIP_c.sql" />
   </ItemGroup>
 </Project>
