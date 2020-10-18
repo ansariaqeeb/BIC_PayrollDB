@@ -10,15 +10,15 @@ CREATE PROCEDURE [dbo].[EMPLOYEEPAYMAPPING_g]
 AS
     BEGIN 
 	 
-      DECLARE @pMID INT , 
-	  @pEMPID INT   
+      DECLARE @pMID BIGINT , 
+	  @pEMPID BIGINT   
      ------------------------------------------------------------------------------------------
 	 DECLARE @verrorId INT 
      DECLARE @vspName VARCHAR(100) 
      SET @vspName = 'EMPLOYEEPAYMAPPING_g'
      
-     SELECT @pMID = N.C.value('@MID[1]', 'INT'),
-			@pEMPID = N.C.value('@EMPID[1]', 'INT') 
+     SELECT @pMID = N.C.value('@MID[1]', 'BIGINT'),
+			@pEMPID = N.C.value('@EMPID[1]', 'BIGINT') 
      FROM   @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
     
      EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vSPNAME
@@ -35,13 +35,13 @@ AS
 			S.STATUSCODE,
 			S.DISCRIPTION AS STATUSDESC,
 			E.EMPID,
-			E.CALSEQUENCE,
-			E.AMOUNT,
+			E.CALSEQUENCE, 
+			CAST(ISNULL(E.AMOUNT,0)AS DECIMAL(21,2))AS AMOUNT,
 			E.IsCalculation,
 			E.FORMULA,
 			E.ISACTIVE 
 			FROM  dbo.EMPLOYEEPAYMAPPING E
-			LEFT JOIN dbo.EMPLOYEE EP ON EP.EMPCODE=E.EMPID
+			LEFT JOIN dbo.EMPLOYEE EP ON EP.EMPID=E.EMPID
 			LEFT JOIN dbo.PAYSLIPHEADS P ON P.HEADID=E.HEADID
 			LEFT JOIN dbo.StatusMaster S ON S.STATUSID=P.TRANSACTIONTYPE AND S.TYPEID=3
 			WHERE
