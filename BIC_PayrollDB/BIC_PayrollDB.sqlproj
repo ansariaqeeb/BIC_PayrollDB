@@ -60,6 +60,7 @@
     <Folder Include="Tables" />
     <Folder Include="StoredProcedure" />
     <Folder Include="Function" />
+    <Folder Include="StoredProcedure\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\userMaster.sql" />
@@ -115,5 +116,7 @@
     <Build Include="StoredProcedure\RATEMASTER_g.sql" />
     <Build Include="Tables\PROCESSPAYSLIP.sql" />
     <Build Include="StoredProcedure\PROCESSPAYSLIP_c.sql" />
+    <Build Include="StoredProcedure\PROCESSPAYSLIPCAL_g.sql" />
+    <Build Include="StoredProcedure\PROCESSPAYSLIP_g_1.sql" />
   </ItemGroup>
 </Project>
