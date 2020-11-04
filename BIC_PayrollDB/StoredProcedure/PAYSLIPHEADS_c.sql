@@ -32,7 +32,8 @@ AS
 			@pISAFFECTPAYSLIP BIT,
 			@pPRINTONPS BIT,
 			@pTYPEOFINPUTID INT ,
-			@pRATEID INT 
+			@pRATEID INT ,
+			@pPAYROLLDESC NVARCHAR(1000)
 			 
 
 			SET @vlocal = 0 
@@ -43,6 +44,7 @@ AS
 					@pHEADCODE  =  N.C.value('@HEADCODE[1]','VARCHAR(20)'), 
 					@pTRANSACTIONTYPE  =  N.C.value('@TRANSACTIONTYPE[1]','INT'), 
 					@pDESC  =  N.C.value('@DESC[1]','NVARCHAR(200)'), 
+					@pPAYROLLDESC=  N.C.value('@PAYROLLDESC[1]','NVARCHAR(1000)'),
 					@pISACTIVE  =  N.C.value('@ISACTIVE[1]','BIT'),
 					@pIsCalculation  =  N.C.value('@IsCalculation[1]','BIT'),
 					@pISAFFECTNATIONALPAY  =  N.C.value('@ISAFFECTNATIONALPAY[1]','BIT'),
@@ -82,7 +84,8 @@ AS
 						FORMULA,
 						COMPID,
 						CREATEDON,
-						CREATEDBY
+						CREATEDBY,
+						PAYROLLDESC
 					)
 					VALUES
 					(
@@ -98,7 +101,8 @@ AS
 						@pFORMULA,
 						@pCOMPID,
 						GETDATE(),
-						@pUSERID
+						@pUSERID,
+						@pPAYROLLDESC
 					) 
 
 					SET @videntity = @@IDENTITY
@@ -122,7 +126,8 @@ AS
 					FORMULA=@pFORMULA,  
 					ISACTIVE=@pISACTIVE, 
 					UPDATEDBY=@pUSERID,
-					UPDATEDON=GETDATE()
+					UPDATEDON=GETDATE(),
+					PAYROLLDESC=@pPAYROLLDESC
 					WHERE HEADID=@pHEADID
 
 					SET @videntity = @pHEADID 
