@@ -1,0 +1,62 @@
+﻿ IF (OBJECT_ID('FORMULACALCULATION_g') IS NOT NULL) 
+BEGIN 
+DROP PROCEDURE FORMULACALCULATION_g
+END
+GO
+CREATE PROCEDURE [dbo].[FORMULACALCULATION_g]
+(
+ @pXMLFILE XML 
+)
+AS
+    BEGIN 
+	 
+      DECLARE @pCALID BIGINT,  
+	  @pHEADID BIGINT,
+	  @pCOMPID INT, 
+	  @pUSERID INT    
+     ------------------------------------------------------------------------------------------
+	 DECLARE @verrorId INT 
+     DECLARE @vspName VARCHAR(100) 
+     SET @vspName = 'FORMULACALCULATION_g'
+     
+     SELECT @pCALID = N.C.value('@CALID[1]', 'BIGINT'), 
+			@pHEADID = N.C.value('@HEADID[1]', 'BIGINT'),
+			@pCOMPID = N.C.value('@COMPID[1]', 'INT'), 
+			@pUSERID = N.C.value('@USERID[1]', 'INT') 
+     FROM   @pXMLFILE.nodes('//XMLFILE/SPXML/SPDETAILS') N ( C )
+    
+     EXEC DBLOG_c @pXMLFILE = @pXMLFILE, @pSPNAME = @vSPNAME
+     ------------------------------------------------------------------------------------------
+        
+		BEGIN TRY  
+			SELECT 
+			CALID, 
+			P.HEADID ,
+			H.HEADCODE,
+			H.[DESC] AS HEADDESC,
+			ISNULL(CONDITION,'')AS CONDITION,
+			ISNULL(CALCULATION,'')AS CALCULATION,
+			ISEXIT ,
+			ISNULL(RESULT,'')AS RESULT, 
+			CAST(ISNULL(TESTVALUE,0)AS DECIMAL(21,2))AS TESTVALUE,
+			ISNULL(P.ISACTIVE,0)AS ISACTIVE
+			FROM  dbo.FORMULACALCULATION P  
+			INNER JOIN PAYSLIPHEADS H ON H.HEADID = P.HEADID 
+			WHERE
+			1 = CASE WHEN @pCALID=0 THEN 1 WHEN @pCALID<>0 AND CALID=@pCALID THEN 1 ELSE 0 END
+			AND 1 = CASE WHEN @pCOMPID<>0 AND P.COMPID= @pCOMPID THEN 1 ELSE 0 END  
+			AND 1 = CASE WHEN @pHEADID<>0 AND P.HEADID= @pHEADID THEN 1 ELSE 0 END  
+
+		END TRY 
+   
+		BEGIN CATCH
+
+		SET @vERRORID = 0 - ERROR_NUMBER() 
+		
+		SELECT  0 - ERROR_NUMBER() AS 'ID' 
+
+		EXECUTE LogError_i @pXMLFILE, @vERRORID OUTPUT; 
+
+		END CATCH; 
+    END 
+GO
